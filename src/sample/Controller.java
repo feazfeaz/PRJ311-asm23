@@ -105,21 +105,11 @@ public class Controller implements Initializable {
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/sample/xml/xmlGroupManager.fxml"))));
         stage.showAndWait();
         choiceBoxFunc();
-    }
-
-    //note importance - ObservableList
-    public ObservableList<AddContact.MyUser> getItems() {
-        ObservableList<AddContact.MyUser> list = FXCollections.observableArrayList();
-        list.addAll(Main.myUsers);
-        return list;
-    }
-
-    public void setItem(ArrayList<AddContact.MyUser> myUsers) {
-        tb_main_content.getItems().clear();
-        tb_main_content.getItems().addAll(myUsers);
+        Main.saver();
     }
 
     public void handleRemove(MouseEvent event) {
+        if(tb_main_content.getSelectionModel().getSelectedItem() == null) return;
         Popup popup = new Popup("Xác nhận xóa contact!", "Xóa", "Hủy");
         popup.getPopup().setTitle("Xóa contact");
         popup.getConfim().setOnAction(event1 -> {
@@ -131,6 +121,7 @@ public class Controller implements Initializable {
         });
         popup.getClose().setOnAction(event1 -> popup.getPopup().close());
         popup.getPopup().showAndWait();
+        Main.saver();
     }
 
     private void handleAdd(MouseEvent event) throws IOException {
@@ -141,9 +132,11 @@ public class Controller implements Initializable {
         stage.showAndWait();
 //        setItem(Main.myUsers);
         choiceBoxFunc();
+        Main.saver();
     }
 
     private void handleUpdateContact(MouseEvent event) throws IOException {
+        if(tb_main_content.getSelectionModel().getSelectedItem() == null) return;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/sample/xml/UpdateContact.fxml"));
         Parent root = fxmlLoader.load();
@@ -155,12 +148,16 @@ public class Controller implements Initializable {
         stage.setScene(new Scene(root));
         stage.showAndWait();
         choiceBoxFunc();
+        Main.saver();
     }
 
     public void choiceBoxFunc() {
         sample_groupNames_choiceBox.getItems().clear();
-        sample_groupNames_choiceBox.getItems().addAll(Main.groupName);
-        sample_groupNames_choiceBox.setValue(sample_groupNames_choiceBox.getItems().get(0));
+        if(!Main.groupName.isEmpty()){
+            sample_groupNames_choiceBox.getItems().addAll(Main.groupName);
+            sample_groupNames_choiceBox.setValue(sample_groupNames_choiceBox.getItems().isEmpty() ? "All" : sample_groupNames_choiceBox.getItems().get(0));
+        }
+
         sample_groupNames_choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -206,8 +203,16 @@ public class Controller implements Initializable {
             }
         });
     }
+    //note importance - ObservableList
+    public ObservableList<AddContact.MyUser> getItems() {
+        ObservableList<AddContact.MyUser> list = FXCollections.observableArrayList();
+        list.addAll(Main.myUsers);
+        return list;
+    }
 
-
-//    start
+    public void setItem(ArrayList<AddContact.MyUser> myUsers) {
+        tb_main_content.getItems().clear();
+        tb_main_content.getItems().addAll(myUsers);
+    }
 
 }

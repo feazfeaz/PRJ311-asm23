@@ -32,8 +32,10 @@ public class XmlGroupManager implements Initializable {
     public Text txtAlert;
 
     ArrayList<String> names = new ArrayList<String>() {{
-        addAll(Main.groupName);
-        remove(0);
+        if(!Main.groupName.isEmpty()){
+            addAll(Main.groupName);
+            remove(0);
+        }
     }};
 
     @Override
@@ -107,9 +109,16 @@ public class XmlGroupManager implements Initializable {
         lstvNameGroup.getItems().clear();
         lstvNameGroup.getItems().addAll(names);
 
+        for (AddContact.MyUser user : Main.myUsers){
+            if(user.getGroup_name().equalsIgnoreCase(txtField_replace.getText()))
+                user.setGroup_name(txtField_replaceto.getText());
+        }
+
         txtField_replace.setText("");
         txtField_replaceto.setText("");
         txtField_remove.setText("");
+
+
 
         txtAlert.setText("* Rename Success!");
         txtAlert.setFill(Color.GREEN);

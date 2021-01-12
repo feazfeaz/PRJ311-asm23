@@ -48,12 +48,13 @@ public class AddContact implements Initializable {
 
         //default field value
         ArrayList<String> groupNameContact = new ArrayList<String>();
-        groupNameContact.addAll(Main.groupName);
-        groupNameContact.remove(0);
-        choiceBox_groupname.getItems().clear();
-        choiceBox_groupname.getItems().addAll(groupNameContact);
-        choiceBox_groupname.setValue(groupNameContact.isEmpty() ? "Empty" : groupNameContact.get(0));
-
+        if(!Main.groupName.isEmpty()){
+            groupNameContact.addAll(Main.groupName);
+            groupNameContact.remove(0);
+            choiceBox_groupname.getItems().clear();
+            choiceBox_groupname.getItems().addAll(groupNameContact);
+            choiceBox_groupname.setValue(groupNameContact.isEmpty() ? "Empty" : groupNameContact.get(0));
+        }
         datepicker_birth_date.setValue(LocalDate.now());
 
         //event
